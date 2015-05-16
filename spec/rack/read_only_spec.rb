@@ -6,13 +6,8 @@ require 'rack/read_only'
 RSpec.describe 'Read only mode' do
   include Rack::Test::Methods
 
-  # Should also include HEAD, but I couldn't make it work.
-  READ_METHODS = %w(GET OPTIONS)
-  WRITE_METHODS = %w(POST PUT DELETE PATCH)
-  ALL_METHODS = READ_METHODS + WRITE_METHODS
-
   class TestEndpoint < Sinatra::Base
-    ALL_METHODS.each do |m|
+    Rack::ReadOnly::ALL_METHODS.each do |m|
       send(m.downcase, '/test') do
         'ok'
       end
@@ -34,7 +29,7 @@ RSpec.describe 'Read only mode' do
       end
     end
 
-    READ_METHODS.each do |m|
+    Rack::ReadOnly::READ_METHODS.each do |m|
       it "allows #{m} requests" do
         make_request m
 
@@ -42,7 +37,7 @@ RSpec.describe 'Read only mode' do
       end
     end
 
-    WRITE_METHODS.each do |m|
+    Rack::ReadOnly::WRITE_METHODS.each do |m|
       it "rejects #{m} requests" do
         make_request m
 
@@ -68,7 +63,7 @@ RSpec.describe 'Read only mode' do
       end
     end
 
-    ALL_METHODS.each do |m|
+    Rack::ReadOnly::ALL_METHODS.each do |m|
       it "allows #{m} requests" do
         make_request m
 

@@ -2,6 +2,10 @@ require "rack/read_only/version"
 
 module Rack
   class ReadOnly
+    READ_METHODS = %w(HEAD GET OPTIONS)
+    WRITE_METHODS = %w(POST PUT DELETE PATCH)
+    ALL_METHODS = READ_METHODS + WRITE_METHODS
+
     attr_reader :app, :options
 
     def initialize(app, options = {})
